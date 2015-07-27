@@ -1,9 +1,12 @@
 var gulp = require('gulp');
+var ghpages = require('gulp-gh-pages');
 var connect = require('connect');
 var livereload = require('livereload');
 var morgan = require('morgan');
 var connectLivereload = require('connect-livereload');
 var serveStatic = require('serve-static');
+var mainBowerFiles = require('main-bower-files');
+var es = require('event-stream');
 
 var http = require('http');
 
@@ -22,4 +25,11 @@ gulp.task('server', function(done) {
     done();
     process.exit();
   });
+});
+
+gulp.task('deploy', function() {
+  return es.merge([
+    gulp.src(mainBowerFiles(), { base: '.' }),
+    gulp.src('public/**/*'),
+  ]).pipe(ghpages());
 });

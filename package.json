@@ -6,6 +6,9 @@
     "morgan": "~1.6.1",
     "serve-static": "~1.10.0",
     "connect": "~3.4.0",
-    "livereload": "~0.3.7"
+    "livereload": "~0.3.7",
+    "main-bower-files": "~2.9.0",
+    "event-stream": "~3.3.1",
+    "gulp-gh-pages": "~0.5.2"
   }
 }
