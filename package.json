@@ -1,0 +1,11 @@
+{
+  "name": "todo",
+  "dependencies": {
+    "gulp": "~3.9.0",
+    "connect-livereload": "~0.5.3",
+    "morgan": "~1.6.1",
+    "serve-static": "~1.10.0",
+    "connect": "~3.4.0",
+    "livereload": "~0.3.7"
+  }
+}

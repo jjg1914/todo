@@ -1,0 +1,7 @@
+{
+  "name": "todo",
+  "dependencies": {
+    "angular": "~1.4.3",
+    "ui-router": "~0.2.15"
+  }
+}
