@@ -16,7 +16,7 @@ main {
   position: relative;
 }
 
-input[type="text"] {
+.todo-input {
   color: inherit;
   background: transparent;
   text-decoration: inherit;
@@ -30,7 +30,7 @@ input[type="text"] {
   box-sizing: border-box;
 }
 
-.todo-completed {
+.todo-checkbox-input {
   position: absolute;
   left: 0.25em;
   top: 0.6em;
@@ -44,23 +44,29 @@ input[type="text"] {
   -moz-user-select: none;
 }
 
-.todos {
+.todo-checkbox-inactive{ 
+  display: none;
+}
+
+.todo-new-item,
+.todo-list {
   list-style: none;
   padding: 0;
   margin: 0 0.5em;
   box-sizing: border-box;
 }
 
-.todo {
+.todo-new-item,
+.todo-item {
   position: relative;
   border-bottom: thin solid #F8F8F8;
   padding: 0.5em;
 }
 
-.completed {
-  color: #5858EE;
+.todo-item-completed {
+  color: #31BCE3;
 }
 
-.completed input[type="text"]:not(:focus) {
+.todo-item-completed .todo-input:not(:focus) {
   text-decoration: line-through;
 }
