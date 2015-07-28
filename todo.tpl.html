@@ -1,0 +1,17 @@
+<main>
+  <form class="todo-new-item">
+    <input class="todo-input" placeholder="What needs to be done?">
+  </form>
+  <ol class="todo-list">
+    {{#todos}}
+      <li class="todo-item {{#complete}}todo-item-completed{{/complete}}">
+        <span class="todo-checkbox-input">
+          <span class="{{^complete}}todo-checkbox-inactive{{/complete}}">
+            &#10004;
+          </span>
+        </span>
+        <input class="todo-input" value="{{text}}">
+      </li>
+    {{/todos}}
+  </ol>
+</main>

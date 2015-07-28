@@ -1,75 +1,45 @@
-var todo = angular.module('todo', [ 'ui.router', 'ngAnimate' ]);
-
-todo.config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider.state('index', {
-    url: '/',
-    templateUrl: 'index.tpl.html',
-    controller: function($scope, todoStore) {
-      $scope.todos = todoStore.open();
-      console.log($scope.todos);
-
-      $scope.$watch('todos', function(newValue) {
-        $scope.todos = newValue.filter(function(e,i) {
-          return i === 0 || (typeof e.text === 'string' && e.text.trim().length > 0);
-        });
-        todoStore.save($scope.todos);
-      }, true);
-
-      this.addTodo = function() {
-        $scope.todos.unshift({ text: '' });
-      };
-
-      this.isEmpty = function() {
-        return $scope.todos == null || $scope.todos.length === 0;
-      };
-    },
-    controllerAs: 'ctrl',
-  });
-
-  $urlRouterProvider.otherwise('/');
-});
-
-todo.service('todoStore', function($q) {
-  return {
-    open: function() {
-      if (localStorage['todos'] != null) {
-        return JSON.parse(localStorage['todos']);
-      } else {
-        return [ { text: null } ];
-      }
-    },
-    save: function(todos) {
-      localStorage['todos'] = JSON.stringify(todos.map(function(e) {
-        return {
-          text: e.text,
-        };
-      }));
+$(function() {
+  $.get('todo.tpl.html').then(function(tpl) {
+    if (localStorage.getItem('todo-version') < 2) {
+      localStorage.clear();
     }
-  };
-});
+    localStorage.setItem('todo-version', 2);
 
-todo.directive('todoAutoFocus', function($animate) {
-  return {
-    restrict: 'A',
-    link: function($scope, $element) {
-      $animate.on('enter', $element, function() {
-        $element.find('input')[0].focus();
+    var state = localStorage.getItem('todo');
+    if (state == null) {
+      state = {
+        todos: [],
+      };
+    } else {
+      state = JSON.parse(state);
+    }
+
+    var flip = function() {
+      state.todos = state.todos.filter(function(e) {
+        return (typeof e.text === 'string' && e.text.trim().length > 0);
       });
-    },
-  };
-});
+      $('body').html(Mustache.render(tpl, state));
+      localStorage.setItem('todo', JSON.stringify(state));
+    };
 
-todo.directive('todoCompleted', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    template: '<span class="todo-completed" ng-click="value=!value">' +
-        '<span ng-show="value">&#10004;</span>' +
-      '</span>',
-    scope: {
-      value: '=',
-    },
-    link: function($scope, $element) {
-    },
-  };
+    $('body').on('click', '.todo-checkbox-input', function() {
+      var index = $(this).parent().index();
+      state.todos[index].complete = !state.todos[index].complete;
+      flip();
+    });
+
+    $('body').on('change', '.todo-item .todo-input', function() {
+      var index = $(this).parent().index();
+      state.todos[index].text = $(this).val();
+      flip();
+    });
+
+    $('body').on('submit', '.todo-new-item', function() {
+      state.todos.unshift({ text: $(this).find('input').val() });
+      flip();
+      $('.todo-new-item input').focus();
+    });
+
+    flip();
+  });
 });
